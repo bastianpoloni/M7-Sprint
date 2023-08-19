@@ -295,19 +295,21 @@
   };
   const getTransferencias = async () => {
     const { data } = await axios.get("http://localhost:3000/transferencias");
-    console.warn(jqxhr.responseText)
     $(".transferencias").html("");
-    data.forEach((t) => {
+    for (let t of data) {
+      let emisor = await getUserById(t.emisor);
+      let receptor = await getUserById(t.receptor);
       $(".transferencias").append(` 
-      <tr> 
-        <td> ${formatDate(t[4])} </td> 
-        <td>${t[1]}</td> 
-        <td>${t[2]}</td> 
-        <td>${t[3]}</td>
-      </tr> 
+            <tr> 
+            <td> ${formatDate(t.createdAt)} </td> 
+            <td>${emisor}</td> 
+            <td>${receptor}</td> 
+            <td>${t.monto}</td>
+          </tr> 
       `);
-    });
-  };
+    }
+
+  }; 
 
   getUsuarios();
   getTransferencias();
@@ -317,6 +319,15 @@
     const timeFormat = moment(date).format("LTS");
     return `${dateFormat} ${timeFormat}`;
   };
+
+  const getUserById = async (id) => {
+    const res = await fetch(`http://localhost:3000/usuario/${id}`);
+    const data = await res.json();
+    for (let c of data) {
+      return c.nombre;
+    }
+
+  }
   formatDate();
 </script>
 

@@ -1,7 +1,7 @@
 import express from 'express';
 import { pool } from './connection.js';
 import hbs from 'hbs';
-import {crearUsuario, sequelize, listarUsuarios, borrarUsuario, actualizarUsuario} from './models/Usuarios.js';
+import {crearUsuario, sequelize, listarUsuarios, borrarUsuario, actualizarUsuario, getById} from './models/Usuarios.js';
 import {crearTransferencia, listarTransferencias} from './models/Transferencias.js';
 
 const app = express();
@@ -47,6 +47,11 @@ app.get ('/transferencias', async (req, res) => {
     // console.log(tl);
     // res.send( tl);
     res.send(await listarTransferencias());
+});
+
+app.get('/usuario/:id', async (req, res) => {
+    res.send(await getById(req.params.id));
+    
 });
 
 app.listen(3000, () => {
