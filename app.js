@@ -1,6 +1,6 @@
 import express, { query } from 'express';
 import { pool } from './connection.js';
-import hbs from 'hbs';
+//import hbs from 'hbs';
 import {crearUsuario, sequelize, listarUsuarios, borrarUsuario, actualizarUsuario} from './models/Usuarios.js';
 import {crearTransferencia, listarTransferencias} from './models/Transferencias.js';
 
@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-app.set('view engine', 'hbs');
+//app.set('view engine', 'hbs');
 sequelize.sync({alter: true});
 
 app.get('/', (req, res) => {
@@ -17,7 +17,6 @@ app.get('/', (req, res) => {
 })
 
 app.post('/usuario', async (req, res) => {
-    //console.log(req.body);
    await crearUsuario(req.body.username, req.body.balance);
    res.redirect('/');
 });

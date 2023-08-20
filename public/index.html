@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,7 +12,7 @@
     />
   </head>
   <body class="p-5">
-    <h1 class="text-center" style="font-size: 60px">&#127979;</h1>
+    <h1 class="text-center" > &#127979; </h1>
     <h2 class="text-center pb-0 mb-0">Banco Solar C.A</h2>
     <hr class="w-25 pb-1" />
     <div class="row m-auto px-5">
@@ -24,14 +24,18 @@
             <div class="d-flex align-items-center justify-content-center">
               Nombre:
               <input
+                title="Nombre"
                 class="form-control d-inline mx-3"
                 name="username"
+                type="text"
                 required
               />
               Balance:
               <input
+                title="Balance"
                 class="form-control d-inline mx-3"
                 name="balance"
+                type="number"
                 required
               />
               <button type="submit" class="btn btn-danger">Agregar</button>
@@ -51,6 +55,7 @@
               <div class="mr-2">
                 Emisor:
                 <select
+                  title="Emisor"
                   id="emisor"
                   class="form-control mx-2 w-auto d-inline"
                 ></select>
@@ -58,6 +63,7 @@
               <div class="mr-3">
                 Receptor:
                 <select
+                  title="Receptor"
                   id="receptor"
                   class="form-control mx-2 w-auto d-inline"
                 ></select>
@@ -65,6 +71,7 @@
               <div class="mr-3">
                 Monto:
                 <input
+                  title="Monto"
                   type="number"
                   class="form-control mx-2 w-auto d-inline"
                   id="monto"
@@ -211,7 +218,7 @@
   $("form:first").submit(async (e) => {
     e.preventDefault();
     let username = $("form:first input:first").val();
-    let balance = Number(("form:first input:nth-child(2)").val());
+    let balance = $("form:first input:nth-child(2)").val();
     try {
       const response = await fetch("http://localhost:3000/usuario", {
         method: "post",
@@ -222,7 +229,7 @@
         }),
       });
       $("form:first input:first").val("");
-      $("form:first input:nth - child(2)").val("");
+      $("form:first input:nth-child(2)").val("");
       location.reload();
     } catch (e) {
       alert("Algo salió mal ..." + e);
