@@ -1,4 +1,4 @@
-import { sequelize, sumarDinero, restarDinero } from "./Usuarios.js";
+import { sequelize } from "./Usuarios.js";
 import { DataTypes } from "sequelize";
 
 export const transferencias = sequelize.define("transferencias", { 
@@ -10,10 +10,6 @@ export const transferencias = sequelize.define("transferencias", {
 
 export async function crearTransferencia(emisor, receptor, monto) {
     await transferencias.create({emisor, receptor, monto});
-    await restarDinero(emisor, monto);
-    await sumarDinero(receptor, monto);
-    // await usuarios.update({balance: usuarios.balance - monto}, {where: {id: emisor}});
-    // await usuarios.update({balance: usuarios.balance + monto}, {where: {id: receptor}});
 
 }
 

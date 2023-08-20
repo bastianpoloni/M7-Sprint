@@ -194,12 +194,12 @@
     $("#editButton").attr("onclick", `editUsuario('${id}')`);
   };
   const editUsuario = async (id) => {
-    const nombre = $("#nombreEdit").val();
+    const username = $("#nombreEdit").val();
     const balance = $("#balanceEdit").val();
     try {
       const { data } = await axios.put(`http://localhost:3000/usuario/${id}`, 
       {
-        nombre,
+        username,
         balance,
       });
       $("#exampleModal").modal("hide");
@@ -250,7 +250,7 @@
           monto,
         }),
       });
-      const data = await response.json();
+      
       location.reload();
     } catch (e) {
       console.log(e);
@@ -296,9 +296,10 @@
   const getTransferencias = async () => {
     const { data } = await axios.get("http://localhost:3000/transferencias");
     $(".transferencias").html("");
+
     for (let t of data) {
-      let emisor = await getUserById(t.emisor);
-      let receptor = await getUserById(t.receptor);
+      let emisor = await getUserById(t.emisor);      
+      let receptor = await getUserById(t.receptor);      
       $(".transferencias").append(` 
             <tr> 
             <td> ${formatDate(t.createdAt)} </td> 
@@ -321,12 +322,13 @@
   };
 
   const getUserById = async (id) => {
-    const res = await fetch(`http://localhost:3000/usuario/${id}`);
-    const data = await res.json();
-    for (let c of data) {
-      return c.nombre;
-    }
-
+    const res = await fetch(`http://localhost:3000/usuario/${id}`, {
+      method: "get",
+      headers: { "Content-Type": "application/json" },
+    });
+    let data = await res.json();
+    return data.nombre;
+    
   }
   formatDate();
 </script>

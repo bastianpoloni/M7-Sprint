@@ -28,24 +28,3 @@ export async function actualizarUsuario(id, nombre, balance) {
 export async function borrarUsuario(id) {
     await usuarios.destroy({where: {id}});
 }
-
-export async function sumarDinero(id, monto) {
-    console.log(typeof id);
-    console.log(typeof monto);
-    console.log(id, monto);
-    id = parseInt(id);
-    monto = parseFloat(monto);
-    await usuarios.update({balance: usuarios.balance + monto}, {where: {id}});
-}
-
-export async function restarDinero(id, monto) {
-    id = parseInt(id);
-    monto = parseFloat(monto);
-    await usuarios.update({balance: usuarios.balance - monto}, {where: {id}});
-}
-
-export async function getById(id) {
-   let res = await usuarios.findByPk(id);
-    console.log(res);
-
-}

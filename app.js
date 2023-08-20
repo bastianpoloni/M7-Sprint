@@ -1,7 +1,7 @@
-import express from 'express';
+import express, { query } from 'express';
 import { pool } from './connection.js';
 import hbs from 'hbs';
-import {crearUsuario, sequelize, listarUsuarios, borrarUsuario, actualizarUsuario, getById} from './models/Usuarios.js';
+import {crearUsuario, sequelize, listarUsuarios, borrarUsuario, actualizarUsuario} from './models/Usuarios.js';
 import {crearTransferencia, listarTransferencias} from './models/Transferencias.js';
 
 const app = express();
@@ -23,9 +23,10 @@ app.post('/usuario', async (req, res) => {
 });
 
 app.post ('/transferencia', async (req, res) => {
-    //console.log(req.body);
     await crearTransferencia(req.body.emisor, req.body.receptor, req.body.monto);
-    res.redirect('/');
+    await pool.query(`UPDATE usuarios SET balance = balance - ${req.body.monto} WHERE id = ${req.body.emisor}`);
+    await pool.query(`UPDATE usuarios SET balance = balance + ${req.body.monto} WHERE id = ${req.body.receptor}`);
+    res.sendStatus(200);
 });
 
 app.get('/usuarios', async (req, res) => {
@@ -38,19 +39,22 @@ app.delete('/usuario/:id', async (req, res) => {
 });
 
 app.put ('/usuario/:id', async (req, res) => {
-    //console.log(req.body);
     res.send(await actualizarUsuario(req.params.id, req.body.username, req.body.balance));
 });
 
 app.get ('/transferencias', async (req, res) => {
-    // const tl = await listarTransferencias();
-    // console.log(tl);
-    // res.send( tl);
     res.send(await listarTransferencias());
 });
 
 app.get('/usuario/:id', async (req, res) => {
-    res.send(await getById(req.params.id));
+    let id = req.params.id;
+    try {
+        let usuario = await pool.query(`SELECT nombre FROM usuarios WHERE id = ${id}`);
+        res.send (usuario.rows[0]);
+    } catch (error) {
+        res.sendStatus(404);
+    }
+    
     
 });
 
